@@ -1,12 +1,18 @@
 let form = document.getElementById('form');
 form.addEventListener('submit', function (event) {
-    if (form.checkValidity()) {
-        calculate();
+    try {
+        if (form.checkValidity()) {
+            calculate();
+        }
+        else {
+            form.classList.add('was-validated');
+        }
+        stopEvent(event);
+    } catch (error) {
+        alert(error);
+        stopEvent(event);
     }
-    else {
-        form.classList.add('was-validated');
-    }
-    stopEvent(event);
+
   }, true);
 
 window.onload = () => {
@@ -100,7 +106,8 @@ function calculate() {
 
 function getMaxIssue() {
     let maxValue = 0;
-    let all_issues_elements = document.querySelectorAll('input[id^=issue-]:checked').values().toArray();
+    // debug
+    let all_issues_elements = Array.from(document.querySelectorAll('input[id^=issue-]:checked').values());
     all_issues_elements.forEach((element) => {
         if (element.value > maxValue) maxValue = element.value
     });
